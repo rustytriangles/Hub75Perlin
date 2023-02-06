@@ -44,17 +44,24 @@ int main() {
 
     Perlin p;
 
+    const double scale = 5. / (double)FB_HEIGHT;
+
+    double ang = 0.;
+    const double ang_step = 0.075;
+
     while (true) {
 
         for (int i=0; i<FB_WIDTH; i++) {
-            double x = (double)i / (double)FB_WIDTH;
+            double x = scale * (double)i;
             for (int j=0; j<FB_HEIGHT; j++) {
-                double y = (double)j / (double)FB_HEIGHT;
-                double v = p.eval(x,y);
-                backbuffer[i][j] = hsv_to_rgb(v, 1., 1.);
+                double y = scale * (double)j;
+                double z = scale * (1. + sin(ang));
+                double v = octaves(p, x,y,z, 4);
+                frontbuffer[i][j] = hsv_to_rgb(v, 0.75, 0.5);
             }
         }
 
+        ang += ang_step;
         hub75_flip();
 
         sleep_ms(1);

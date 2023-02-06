@@ -97,3 +97,15 @@ int Perlin::inc(int num) const {
     return num;
 }
 
+double octaves(Perlin& p, double x, double y, double z, int n) {
+    double v = 0.;
+    double f = 1.;
+    double a = 1.;
+    for (int k=0; k<n; k++) {
+        v += a * p.eval(x * f,y * f,z * f);
+        f *= 2.;
+        a /= 2.;
+    }
+    return v;
+}
+

@@ -20,3 +20,4 @@ private:
 
 };
 
+double octaves(Perlin& p, double x, double y, double z, int n);
