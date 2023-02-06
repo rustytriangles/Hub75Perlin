@@ -26,23 +26,6 @@ Perlin::Perlin() :
     }
 }
 
-double Perlin::OctavePerlin(double x, double y, double z, int octaves, double persistence) {
-    double total = 0;
-    double frequency = 1;
-    double amplitude = 1;
-    double maxValue = 0;			// Used for normalizing result to 0.0 - 1.0
-    for(int i=0;i<octaves;i++) {
-        total += eval(x * frequency, y * frequency, z * frequency) * amplitude;
-
-        maxValue += amplitude;
-
-        amplitude *= persistence;
-        frequency *= 2;
-    }
-
-    return total/maxValue;
-}
-
 double Perlin::eval(double x, double y, double z) const {
     // if(m_Repeat > 0) {									// If we have any repeat on, change the coordinates to their "local" repetitions
     //     x = x%m_Repeat;
@@ -101,11 +84,13 @@ double octaves(Perlin& p, double x, double y, double z, int n) {
     double v = 0.;
     double f = 1.;
     double a = 1.;
+    double m = 0.;
     for (int k=0; k<n; k++) {
         v += a * p.eval(x * f,y * f,z * f);
+        m += a;
         f *= 2.;
         a /= 2.;
     }
-    return v;
+    return v / m;
 }
 

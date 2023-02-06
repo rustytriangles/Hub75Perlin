@@ -1,11 +1,16 @@
 #include <vector>
+
+/* Implementation of Perlin's noise function.
+ *
+ * Based on http://adrianb.io/2014/08/09/perlinnoise.html
+ *
+ */
 class Perlin {
 public:
 
 	Perlin();
 
-	double OctavePerlin(double x, double y, double z, int octaves, double persistence);
-
+    // Evaluate at the specified location
 	double eval(double x, double y, double z = 3.1415) const;
 
 private:
@@ -17,7 +22,7 @@ private:
 
 	int inc(int num) const;
 
-
 };
 
+// Sum n octaves
 double octaves(Perlin& p, double x, double y, double z, int n);
