@@ -44,10 +44,10 @@ int main() {
 
     Perlin p;
 
-    const double scale = 5. / (double)FB_HEIGHT;
+    const double scale = 3. / (double)FB_HEIGHT;
 
     double ang = 0.;
-    const double ang_step = 0.075;
+    const double ang_step = 0.25;
 
     while (true) {
 
