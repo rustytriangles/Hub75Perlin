@@ -22,35 +22,35 @@ const uint16_t GAMMA_12BIT[256] = {
     1539, 1554, 1570, 1585, 1600, 1616, 1631, 1647, 1663, 1678, 1694, 1710, 1726, 1743, 1759, 1775,
     1791, 1808, 1824, 1841, 1858, 1875, 1891, 1908, 1925, 1943, 1960, 1977, 1994, 2012, 2029, 2047};
 
-
 // We don't *need* to make Pixel a fancy struct with RGB values, but it helps.
 #pragma pack(push, 1)
-struct alignas(4) Pixel {
+struct alignas(4) Pixel
+{
     uint8_t r;
     uint8_t g;
     uint8_t b;
     uint8_t _;
 
-    constexpr Pixel() :
-        r(0), g(0), b(0), _(0) {
+    constexpr Pixel() : r(0), g(0), b(0), _(0)
+    {
     }
 
-    constexpr Pixel(uint8_t r, uint8_t g, uint8_t b) :
-        r(r), g(g), b(b), _(0) {
+    constexpr Pixel(uint8_t r, uint8_t g, uint8_t b) : r(r), g(g), b(b), _(0)
+    {
     }
 
-    constexpr Pixel(float r, float g, float b) :
-        r((uint8_t)(r * 255.0f)),
-        g((uint8_t)(g * 255.0f)),
-        b((uint8_t)(b * 255.0f)),
-        _(0) {
+    constexpr Pixel(float r, float g, float b) : r((uint8_t)(r * 255.0f)),
+                                                 g((uint8_t)(g * 255.0f)),
+                                                 b((uint8_t)(b * 255.0f)),
+                                                 _(0)
+    {
     }
 };
 #pragma pack(pop)
 
-std::ostream& operator<<(std::ostream& str, Pixel const& p);
+std::ostream &operator<<(std::ostream &str, Pixel const &p);
 
-bool operator==(const Pixel& a, const Pixel& b);
+bool operator==(const Pixel &a, const Pixel &b);
 
 // Basic function to convert Hue, Saturation and Value to an RGB colour
 Pixel hsv_to_rgb(float h, float s, float v);
