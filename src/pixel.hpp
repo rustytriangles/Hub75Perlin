@@ -1,4 +1,5 @@
 #include <iostream>
+#include <tuple>
 
 #pragma once
 
@@ -24,33 +25,40 @@ const uint16_t GAMMA_12BIT[256] = {
 
 // We don't *need* to make Pixel a fancy struct with RGB values, but it helps.
 #pragma pack(push, 1)
-struct alignas(4) Pixel
-{
+struct alignas(4) Pixel {
     uint8_t r;
     uint8_t g;
     uint8_t b;
     uint8_t _;
 
-    constexpr Pixel() : r(0), g(0), b(0), _(0)
-    {
+    constexpr Pixel() : r(0), g(0), b(0), _(0) {
     }
 
-    constexpr Pixel(uint8_t r, uint8_t g, uint8_t b) : r(r), g(g), b(b), _(0)
-    {
+    constexpr Pixel(uint8_t r, uint8_t g, uint8_t b) :
+        r(r), g(g), b(b), _(0) {
     }
 
-    constexpr Pixel(float r, float g, float b) : r((uint8_t)(r * 255.0f)),
-                                                 g((uint8_t)(g * 255.0f)),
-                                                 b((uint8_t)(b * 255.0f)),
-                                                 _(0)
-    {
-    }
 };
 #pragma pack(pop)
 
+// Basic functions to convert between Hue, Saturation and Value and RGB
+Pixel hsv_to_rgb(float h, float s, float v);
+
+struct HsvType {
+    std::tuple<float,float,float> value;
+
+    HsvType(float h, float s, float v) :
+        value(std::make_tuple(h,s,v)) {
+    }
+};
+
+HsvType rgb_to_hsv(Pixel p);
+
+// The following nonsense is really just to make boost test happy
 std::ostream &operator<<(std::ostream &str, Pixel const &p);
 
 bool operator==(const Pixel &a, const Pixel &b);
 
-// Basic function to convert Hue, Saturation and Value to an RGB colour
-Pixel hsv_to_rgb(float h, float s, float v);
+std::ostream &operator<<(std::ostream &str, const HsvType& hsv);
+
+bool operator==(const HsvType& a, const HsvType& b);

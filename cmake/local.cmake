@@ -3,7 +3,7 @@ message(STATUS "found local.cmake")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
 
 
-add_executable(cpp_test test/cpp_test.cpp src/perlin.cpp src/util.cpp)
+add_executable(cpp_test test/cpp_test.cpp src/perlin.cpp src/pixel.cpp src/util.cpp)
 
 target_include_directories(cpp_test
 PRIVATE
