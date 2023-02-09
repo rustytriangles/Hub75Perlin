@@ -26,7 +26,7 @@ Perlin::Perlin() :
     }
 }
 
-double Perlin::eval(double x, double y, double z) const {
+float Perlin::eval(float x, float y, float z) const {
     // if(m_Repeat > 0) {									// If we have any repeat on, change the coordinates to their "local" repetitions
     //     x = x%m_Repeat;
     //     y = y%m_Repeat;
@@ -36,12 +36,12 @@ double Perlin::eval(double x, double y, double z) const {
     int xi = (int)x & 255;								// Calculate the "unit cube" that the point asked will be located in
     int yi = (int)y & 255;								// The left bound is ( |_x_|,|_y_|,|_z_| ) and the right bound is that
     int zi = (int)z & 255;								// plus 1.  Next we calculate the location (from 0.0 to 1.0) in that cube.
-    double xf = x-(int)x;								// We also fade the location to smooth the result.
-    double yf = y-(int)y;
-    double zf = z-(int)z;
-    double u = fade(xf);
-    double v = fade(yf);
-    double w = fade(zf);
+    float xf = x-(int)x;								// We also fade the location to smooth the result.
+    float yf = y-(int)y;
+    float zf = z-(int)z;
+    float u = fade(xf);
+    float v = fade(yf);
+    float w = fade(zf);
 
     int aaa, aba, aab, abb, baa, bba, bab, bbb;
     aaa = p[p[p[    xi ]+    yi ]+    zi ];
@@ -53,24 +53,24 @@ double Perlin::eval(double x, double y, double z) const {
     bab = p[p[p[inc(xi)]+    yi ]+inc(zi)];
     bbb = p[p[p[inc(xi)]+inc(yi)]+inc(zi)];
 
-    double x1, x2, y1, y2;
-    x1 = lerp(	grad (aaa, xf  , yf  , zf),				// The gradient function calculates the dot product between a pseudorandom
-                grad (baa, xf-1, yf  , zf),				// gradient vector and the vector from the input coordinate to the 8
+    float x1, x2, y1, y2;
+    x1 = lerp(	grad (aaa, xf    , yf    , zf),				// The gradient function calculates the dot product between a pseudorandom
+                grad (baa, xf-1.f, yf    , zf),				// gradient vector and the vector from the input coordinate to the 8
                 u);										// surrounding points in its unit cube.
-    x2 = lerp(	grad (aba, xf  , yf-1, zf),				// This is all then lerped together as a sort of weighted average based on the faded (u,v,w)
-                grad (bba, xf-1, yf-1, zf),				// values we made earlier.
+    x2 = lerp(	grad (aba, xf    , yf-1.f, zf),				// This is all then lerped together as a sort of weighted average based on the faded (u,v,w)
+                grad (bba, xf-1.f, yf-1.f, zf),				// values we made earlier.
                 u);
     y1 = lerp(x1, x2, v);
 
-    x1 = lerp(	grad (aab, xf  , yf  , zf-1),
-                grad (bab, xf-1, yf  , zf-1),
+    x1 = lerp(	grad (aab, xf    , yf    , zf-1.f),
+                grad (bab, xf-1.f, yf    , zf-1.f),
                 u);
-    x2 = lerp(	grad (abb, xf  , yf-1, zf-1),
-                grad (bbb, xf-1, yf-1, zf-1),
+    x2 = lerp(	grad (abb, xf    , yf-1.f, zf-1.f),
+                grad (bbb, xf-1.f, yf-1.f, zf-1.f),
                 u);
     y2 = lerp (x1, x2, v);
 
-    return (lerp (y1, y2, w)+1)/2;						// For convenience we bound it to 0 - 1 (theoretical min/max before is -1 - 1)
+    return (lerp (y1, y2, w)+1)/2.f;						// For convenience we bound it to 0 - 1 (theoretical min/max before is -1 - 1)
 }
 
 int Perlin::inc(int num) const {
@@ -80,16 +80,16 @@ int Perlin::inc(int num) const {
     return num;
 }
 
-double octaves(Perlin& p, double x, double y, double z, int n) {
-    double v = 0.;
-    double f = 1.;
-    double a = 1.;
-    double m = 0.;
+float octaves(Perlin& p, float x, float y, float z, int n) {
+    float v = 0.f;
+    float f = 1.f;
+    float a = 1.f;
+    float m = 0.f;
     for (int k=0; k<n; k++) {
         v += a * p.eval(x * f,y * f,z * f);
         m += a;
-        f *= 2.;
-        a /= 2.;
+        f *= 2.f;
+        a /= 2.f;
     }
     return v / m;
 }

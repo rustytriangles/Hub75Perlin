@@ -11,7 +11,7 @@ public:
     Perlin();
 
     // Evaluate at the specified location
-    double eval(double x, double y, double z = 3.1415) const;
+    float eval(float x, float y, float z = 3.1415f) const;
 
 private:
     int m_Repeat;
@@ -24,4 +24,4 @@ private:
 };
 
 // Sum n octaves
-double octaves(Perlin &p, double x, double y, double z, int n);
+float octaves(Perlin &p, float x, float y, float z, int n);

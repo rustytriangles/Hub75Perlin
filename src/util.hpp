@@ -1,5 +1,7 @@
-double grad(int hash, double x, double y, double z);
+float grad(int hash, float x, float y, float z);
 
-double fade(double t);
+float fade(float t);
 
-double lerp(double a, double b, double x);
+float lerp(float a, float b, float x);
+
+float random_between(float minval, float maxval);

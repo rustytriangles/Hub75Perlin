@@ -2,6 +2,7 @@
 #include "hub75util.hpp"
 #include "perlin.hpp"
 #include "pixel.hpp"
+#include "util.hpp"
 
 volatile bool flip = false;
 
@@ -44,32 +45,57 @@ int main() {
 
     Perlin p;
 
-    const double scale = 3. / (double)FB_HEIGHT;
+    const float scale = 3.f / (float)FB_HEIGHT;
 
-    double ang = 0.;
-    const double ang_step = 0.025;
-    const double zr = 10;
-    double x_off = 0;
-    double x_step = 0.01;
-    double h = 0;
-    double h_step = 0.00025;
+    std::srand(std::time(nullptr));
+
+    const int max_steps = 30000;
+    int frame = 0;
+
+    const float min_ang_step = 0.f;
+    const float max_ang_step = 0.2f;
+    const float min_x_step = 0.f;
+    const float max_x_step = 0.05f;
+    const float min_h_step = 0.001f;
+    const float max_h_step = 0.005f;
+
+    float ang = 0.f;
+    const float zr = 10.f;
+    float x_off = 0.f;
+    float h = 0.f;
+
+    float ang_step = random_between(min_ang_step, max_ang_step);
+    float x_step = random_between(min_x_step, max_x_step);
+    float h_step = random_between(min_h_step, max_h_step);
 
     while (true) {
 
+        if (frame > max_steps) {
+            ang = 0.f;
+            x_off = 0.f;
+            h = 0.f;
+
+            ang_step = random_between(min_ang_step, max_ang_step);
+            x_step = random_between(min_x_step, max_x_step);
+            h_step = random_between(min_h_step, max_h_step);
+
+            frame = 0;
+        }
+
         for (int i=0; i<FB_WIDTH; i++) {
-            double x = scale * (double)i + x_off;
+            float x = scale * (float)i + x_off;
             for (int j=0; j<FB_HEIGHT; j++) {
-                double y = scale * (double)j;
-                double z = scale * (zr + zr*sin(ang));
-//                double v = octaves(p, x,y,z, 4);
-                double v = p.eval(x,y,z);
-                frontbuffer[i][j] = hsv_to_rgb(h, 1.-v, 0.25 + 0.75*v);
+                float y = scale * (float)j;
+                float z = scale * (zr + zr*(float)sin(ang));
+                float v = fade(octaves(p, x,y,z, 3));
+//                float v = p.eval(x,y,z);
+                frontbuffer[i][j] = hsv_to_rgb(h, 1.f-v, 0.25f + 0.75f*v);
             }
         }
 
         ang += ang_step;
         x_off += x_step;
-        h = fmod(h+h_step, 1.);
+        h = fmod(h+h_step, 1.f);
 
         hub75_flip();
 

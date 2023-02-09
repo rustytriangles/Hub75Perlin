@@ -12,6 +12,8 @@ include(pico_sdk_import)
 
 set(PICO_CXX_ENABLE_EXCEPTIONS 1)
 
+#set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -O3 -mcpu=cortex-a7 -mfloat-abi=hard -mfpu=neon-vfpv4")
+
 # Link the Project to a source file (step 4.6)
 add_executable(${OUTPUT_NAME}
     src/main.cpp
@@ -29,3 +31,4 @@ target_link_libraries(${OUTPUT_NAME}
 pico_sdk_init()
 
 pico_add_extra_outputs(${OUTPUT_NAME})
+pico_set_float_implementation(${OUTPUT_NAME} pico)
