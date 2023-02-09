@@ -2,21 +2,17 @@
 
 #include "pixel.hpp"
 
-std::ostream &operator<<(std::ostream &str, Pixel const &p)
-{
+std::ostream &operator<<(std::ostream &str, Pixel const &p) {
     str << "[" << (int)p.r << ", " << (int)p.g << ", " << (int)p.b << "]";
     return str;
 }
 
-bool operator==(const Pixel &a, const Pixel &b)
-{
+bool operator==(const Pixel &a, const Pixel &b) {
     return a.r == b.r && a.g == b.g && a.b == b.b;
 }
 
-Pixel hsv_to_rgb(float h, float s, float v)
-{
-    if (h < 0.0f)
-    {
+Pixel hsv_to_rgb(float h, float s, float v) {
+    if (h < 0.0f) {
         h = 1.0f + fmod(h, 1.0f);
     }
 
@@ -34,8 +30,7 @@ Pixel hsv_to_rgb(float h, float s, float v)
 
     uint8_t bv = uint8_t(v);
 
-    switch (i % 6)
-    {
+    switch (i % 6) {
     default:
     case 0:
         return Pixel(bv, t, p);

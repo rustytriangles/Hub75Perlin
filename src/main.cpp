@@ -47,21 +47,30 @@ int main() {
     const double scale = 3. / (double)FB_HEIGHT;
 
     double ang = 0.;
-    const double ang_step = 0.25;
+    const double ang_step = 0.025;
+    const double zr = 10;
+    double x_off = 0;
+    double x_step = 0.01;
+    double h = 0;
+    double h_step = 0.00025;
 
     while (true) {
 
         for (int i=0; i<FB_WIDTH; i++) {
-            double x = scale * (double)i;
+            double x = scale * (double)i + x_off;
             for (int j=0; j<FB_HEIGHT; j++) {
                 double y = scale * (double)j;
-                double z = scale * (1. + sin(ang));
-                double v = octaves(p, x,y,z, 4);
-                frontbuffer[i][j] = hsv_to_rgb(v, 0.75, 0.5);
+                double z = scale * (zr + zr*sin(ang));
+//                double v = octaves(p, x,y,z, 4);
+                double v = p.eval(x,y,z);
+                frontbuffer[i][j] = hsv_to_rgb(h, 1.-v, 0.25 + 0.75*v);
             }
         }
 
         ang += ang_step;
+        x_off += x_step;
+        h = fmod(h+h_step, 1.);
+
         hub75_flip();
 
         sleep_ms(1);
